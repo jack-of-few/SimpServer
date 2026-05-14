@@ -1,0 +1,15 @@
+D:\4 dotnet projs\SimpServer\bin\Debug\net10.0\SimpServer.exe
+D:\4 dotnet projs\SimpServer\bin\Debug\net10.0\SimpServer.deps.json
+D:\4 dotnet projs\SimpServer\bin\Debug\net10.0\SimpServer.runtimeconfig.json
+D:\4 dotnet projs\SimpServer\bin\Debug\net10.0\SimpServer.dll
+D:\4 dotnet projs\SimpServer\bin\Debug\net10.0\SimpServer.pdb
+D:\4 dotnet projs\SimpServer\obj\Debug\net10.0\SimpServer.GeneratedMSBuildEditorConfig.editorconfig
+D:\4 dotnet projs\SimpServer\obj\Debug\net10.0\SimpServer.AssemblyInfoInputs.cache
+D:\4 dotnet projs\SimpServer\obj\Debug\net10.0\SimpServer.AssemblyInfo.cs
+D:\4 dotnet projs\SimpServer\obj\Debug\net10.0\SimpServer.csproj.CoreCompileInputs.cache
+D:\4 dotnet projs\SimpServer\obj\Debug\net10.0\SimpServer.sourcelink.json
+D:\4 dotnet projs\SimpServer\obj\Debug\net10.0\SimpServer.dll
+D:\4 dotnet projs\SimpServer\obj\Debug\net10.0\refint\SimpServer.dll
+D:\4 dotnet projs\SimpServer\obj\Debug\net10.0\SimpServer.pdb
+D:\4 dotnet projs\SimpServer\obj\Debug\net10.0\SimpServer.genruntimeconfig.cache
+D:\4 dotnet projs\SimpServer\obj\Debug\net10.0\ref\SimpServer.dll
