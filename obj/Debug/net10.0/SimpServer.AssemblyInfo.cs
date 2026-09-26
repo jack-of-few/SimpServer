@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SimpServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae275c2d9f061ca2de57d74f358d62d738ef38cb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f4b255afdd14c0f4bbf341e720d3d2208925b93b")]
 [assembly: System.Reflection.AssemblyProductAttribute("SimpServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SimpServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

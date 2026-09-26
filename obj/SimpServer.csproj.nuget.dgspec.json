@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\4 dotnet projs\\SimpServer\\SimpServer.csproj": {}
+    "D:\\2 dotnet projs\\SimpServer\\SimpServer.csproj": {}
   },
   "projects": {
-    "D:\\4 dotnet projs\\SimpServer\\SimpServer.csproj": {
+    "D:\\2 dotnet projs\\SimpServer\\SimpServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\4 dotnet projs\\SimpServer\\SimpServer.csproj",
+        "projectUniqueName": "D:\\2 dotnet projs\\SimpServer\\SimpServer.csproj",
         "projectName": "SimpServer",
-        "projectPath": "D:\\4 dotnet projs\\SimpServer\\SimpServer.csproj",
+        "projectPath": "D:\\2 dotnet projs\\SimpServer\\SimpServer.csproj",
         "packagesPath": "C:\\Users\\shour\\.nuget\\packages\\",
-        "outputPath": "D:\\4 dotnet projs\\SimpServer\\obj\\",
+        "outputPath": "D:\\2 dotnet projs\\SimpServer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\shour\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -59,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.107/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.112/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

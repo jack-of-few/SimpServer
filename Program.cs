@@ -4,11 +4,9 @@ namespace SimpServer;
 
 class Program
 {
-    static object threadLock = new ();
+    static object threadLock = new();
 
-    static void Main(string[] args)
-    {
-        string sig = @"
+    static string sig = @"
  ___ _                                     
 / __(_)_ __  _ __                          
 \__ \ | '  \| '_ \___                      
@@ -17,113 +15,112 @@ class Program
                 |___/\___|_|  \_/\___|_|  
                                             ";
 
-        IPAddress ip = IPAddress.Loopback;
-        int port = 2000;
-        bool useHttps = false;
-        string? dir = null;
-
-        bool host = true;
-
-        try
-        {
-            if(args.Length == 0)
-            {
-                WriteColored("Usage : host -lan -port [any available port] -usehttps -dir [path of directory to host]",ConsoleColor.Green);
-                return;
-            }
-
-            if (args[0].ToLower() == "host")
-            {
-                for (int i = 1; i < args.Length; i++)
-                {
-                    switch (args[i].ToLower())
-                    {
-                        case "-lan":
-                            IPAddress[] addrs = Dns.GetHostAddresses(Dns.GetHostName());
-                            foreach(var addr in addrs)
-                            {
-                                if(addr.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                                    ip = addr;
-                            }
-                            if(ip.ToString() == "127.0.0.1")
-                                throw new Exception("Not connected to LAN");
-                        break;
-
-                        case "-port":
-                            try{port = int.Parse(args[i++ + 1]); if(port <= IPEndPoint.MinPort  || port >= IPEndPoint.MaxPort)throw new Exception("Port must be between "+IPEndPoint.MinPort+" and "+IPEndPoint.MaxPort);}catch{throw new Exception("Invalid port number");}
-                        break;
-
-                        case "-usehttps":
-                            useHttps = true;
-                        break;
-
-                        case "-dir":
-                            if (dir != null)
-                            {
-                                throw new Exception("Redeclaring host directory");
-                            }
-                            else
-                            {
-                                if (Directory.Exists(args[i + 1]) && File.Exists(args[i + 1] + "/index.html"))
-                                    dir = args[i++ + 1];
-                                else
-                                    throw new Exception("The specified directory does not have an index.html file");
-                            }
-                        break;
-
-                        default:
-                            throw new Exception("Unidentified command used \"" + args[i] + "\"");
-                    }
-                }
-
-                if (dir == null)
-                    throw new Exception("Host directory not specified");
-            }
-            else
-            {
-                throw new Exception("Unidentified command used \"" + args[0] + "\"");
-            }
-        }
-        catch(Exception e)
-        {
-            WriteColored("Error : " + e.Message,ConsoleColor.Red);
-            WriteColored("Usage : host -lan -port [any available port] -usehttps -dir [path of directory to host]",ConsoleColor.Green);
-            host = false;
-        }
-
-        if(host)
-        {
-            WriteColored(sig,ConsoleColor.Blue);
-
-            WriteColored($"Hosting {ip}:{port}",ConsoleColor.Cyan);
-
-            Server s = new Server(ip,port,useHttps,dir);
-
-            WriteColored("To stop, enter stop",ConsoleColor.Yellow);
-            bool stop = false;
-            do
-            {
-                var l = Console.ReadLine();
-
-                if(l == "stop")
-                {
-                    s.Shutdown();
-                    stop = true;
-                }
-            }while(!stop);
-        }
+    public enum ConsoleMessageType
+    {
+        Question,
+        Assert,
+        Error,
+        Title
     }
 
-    public static void WriteColored(string line,ConsoleColor color,ConsoleColor? backColor = null)
+    public static void WriteColored(string line, ConsoleMessageType messageType)
     {
-        lock(threadLock)
+        lock (threadLock)
         {
-            if(backColor != null)
-                Console.BackgroundColor = (ConsoleColor)backColor;
-                
-            Console.ForegroundColor = color;
+            switch (messageType)
+            {
+                case ConsoleMessageType.Question:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+
+                case ConsoleMessageType.Assert:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+
+                case ConsoleMessageType.Error:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+
+                case ConsoleMessageType.Title:
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    break;
+            }
+
             Console.WriteLine(line);
             Console.ResetColor();
         }
+    }
+
+    static void Main(string[] args)
+    {
+        WriteColored("Enter directory path :", ConsoleMessageType.Question);
+        string? dir = Console.ReadLine();
+        while (!Directory.Exists(dir))
+        {
+            WriteColored("The given directory does not exist. Please provide another path : ", ConsoleMessageType.Question);
+            dir = Console.ReadLine();
+        }
+
+        IPAddress ip = IPAddress.Loopback;
+        WriteColored("Host the directory on -\n1. This PC\n2. LAN", ConsoleMessageType.Question);
+        ConsoleKeyInfo key;
+        do
+        {
+            key = Console.ReadKey();
+        } while (key.Key != ConsoleKey.D1 && key.Key != ConsoleKey.D2);
+        if (key.Key == ConsoleKey.D2)
+        {
+            bool connected = false;
+            do
+            {
+                IPAddress[] ips = Dns.GetHostAddresses(Dns.GetHostName());
+                foreach (var ipAddr in ips)
+                {
+                    if (ipAddr.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        ip = ipAddr;
+                }
+
+                if (ip.Equals(IPAddress.Loopback))
+                {
+                    WriteColored("You are not connected to any network. Connect and try again.", ConsoleMessageType.Error);
+                    Console.ReadKey();
+                }
+                else
+                {
+                    connected = true;
+                }
+            } while (!connected);
+        }
+
+        Random r = new();
+        int port = r.Next(10000, 20000);
+
+        Server s = new(ip, port, dir);
+
+        Console.Clear();
+        WriteColored(sig, ConsoleMessageType.Title);
+        WriteColored($"Hosting http://{ip}:{port}", ConsoleMessageType.Assert);
+        WriteColored("To clear these logs, enter clear", ConsoleMessageType.Assert);
+        WriteColored("To stop, enter stop", ConsoleMessageType.Assert);
+
+        bool stop = false;
+        do
+        {
+            var l = Console.ReadLine();
+
+            if (l == "stop")
+            {
+                s.Shutdown();
+                stop = true;
+            }
+            if (l == "clear")
+            {
+                Console.Clear();
+                WriteColored(sig, ConsoleMessageType.Title);
+                WriteColored($"Hosting http://{ip}:{port}", ConsoleMessageType.Assert);
+                WriteColored("To clear these logs, enter clear", ConsoleMessageType.Assert);
+                WriteColored("To stop, enter stop", ConsoleMessageType.Assert);
+            }
+        } while (!stop);
     }
 }
